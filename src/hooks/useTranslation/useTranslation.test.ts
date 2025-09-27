@@ -56,7 +56,7 @@ describe("useTranslation", () => {
 
   it("should set source language", () => {
     const { result } = renderHook(() => useTranslation());
-    const newLanguage = { code: "tlh", name: "Klingon", flag: "🖖" };
+    const newLanguage = { code: "tlh" as const, name: "Klingon", flag: "🖖", direction: "ltr" as const };
 
     act(() => {
       result.current.setSourceLanguage(newLanguage);
@@ -68,7 +68,7 @@ describe("useTranslation", () => {
 
   it("should set target language", () => {
     const { result } = renderHook(() => useTranslation());
-    const newLanguage = { code: "en", name: "English", flag: "🇺🇸" };
+    const newLanguage = { code: "en" as const, name: "English", flag: "🇺🇸", direction: "ltr" as const };
 
     act(() => {
       result.current.setTargetLanguage(newLanguage);
