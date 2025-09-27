@@ -1,0 +1,266 @@
+﻿name: 🚀 CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: "18"
+
+jobs:
+  # Quality checks and testing
+  quality:
+    name: 🔍 Code Quality & Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🔧 Run Type Check
+        run: npm run type-check
+
+      - name: 🧹 Run Linter
+        run: npm run lint:check
+
+      - name: 💅 Check Code Formatting
+        run: npm run format:check
+
+      - name: 🧪 Run Tests
+        run: npm run test:coverage
+
+      - name: 📊 Upload Coverage Reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  # Build and validate
+  build:
+    name: 🏗️ Build & Validate
+    runs-on: ubuntu-latest
+    needs: quality
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Project
+        run: npm run build
+
+      - name: 📏 Check Bundle Size
+        run: npm run analyze:size
+
+      - name: 🔍 Validate Build Output
+        run: |
+          echo "Checking if build artifacts exist..."
+          test -d dist
+          test -f dist/index.html
+          echo "Build validation complete! ✅"
+
+      - name: 📤 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+  # Cross-browser testing
+  e2e-tests:
+    name: 🎭 End-to-End Tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright Browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: 🏗️ Build Project
+        run: npm run build
+
+      - name: 🧪 Run E2E Tests (${{ matrix.browser }})
+        run: npm run test:e2e:${{ matrix.browser }}
+
+      - name: 📤 Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 7
+
+  # Accessibility testing
+  accessibility:
+    name: ♿ Accessibility Tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Project
+        run: npm run build
+
+      - name: ♿ Run Accessibility Tests
+        run: npm run test:a11y
+
+      - name: 📊 Generate Accessibility Report
+        run: npm run report:a11y
+
+      - name: 📤 Upload A11y Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-reports
+          path: reports/accessibility/
+          retention-days: 30
+
+  # Security audit
+  security:
+    name: 🔒 Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🔍 Run Security Audit
+        run: npm audit --audit-level moderate
+
+      - name: 🔒 Check for Vulnerabilities
+        run: npm run security:check
+
+  # Deploy to GitHub Pages (main branch only)
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [quality, build, e2e-tests, accessibility]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🏗️ Build for Production
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: 📋 Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: 📤 Upload to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Performance monitoring
+  lighthouse:
+    name: 💡 Lighthouse Performance
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 💡 Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            https://vaporjawn.github.io/klingon-translator
+          configPath: ".lighthouserc.json"
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # Notify on success
+  notify-success:
+    name: 🎉 Notify Success
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: success() && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 🎉 Success Notification
+        run: |
+          echo "🖖 Qapla'! Deployment successful!"
+          echo "🌟 Klingon Universal Translator is live at: https://vaporjawn.github.io/klingon-translator"

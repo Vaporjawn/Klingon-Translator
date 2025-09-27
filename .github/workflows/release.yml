@@ -1,0 +1,260 @@
+﻿name: 📦 Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  NODE_VERSION: "18"
+
+jobs:
+  # Create GitHub Release
+  create-release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏷️ Get Version from Tag
+        id: get_version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: 📝 Generate Release Notes
+        id: release_notes
+        run: |
+          # Extract version without 'v' prefix
+          VERSION=${GITHUB_REF#refs/tags/v}
+
+          # Generate release notes
+          cat > release_notes.md << EOF
+          # 🖖 Klingon Universal Translator v${VERSION}
+
+          **Qapla'!** (Success!) - Another step forward in preserving and sharing the Klingon language!
+
+          ## ✨ What's New in This Release
+
+          ### 🌟 Highlights
+          - Enhanced translation accuracy
+          - Improved Star Trek theme authenticity
+          - Better mobile experience
+          - Performance optimizations
+
+          ### 📚 Dictionary Updates
+          - Added new Klingon vocabulary entries
+          - Improved pronunciation guides
+          - Enhanced cultural context information
+
+          ### 🎨 UI/UX Improvements
+          - Refined Star Trek theme styling
+          - Better accessibility support
+          - Enhanced responsive design
+
+          ### 🔧 Technical Improvements
+          - Updated dependencies for security
+          - Improved build performance
+          - Enhanced error handling
+
+          ## 📈 Statistics
+          - Dictionary entries: See changelog for count
+          - Browser support: Chrome, Firefox, Safari, Edge
+          - Mobile compatibility: iOS, Android
+
+          ## 🚀 Getting Started
+
+          ### Try It Now
+          Visit: https://vaporjawn.github.io/klingon-translator
+
+          ### For Developers
+          \`\`\`bash
+          git clone https://github.com/vaporjawn/klingon-translator.git
+          cd klingon-translator
+          npm install
+          npm run dev
+          \`\`\`
+
+          ## 🤝 Contributing
+
+          Want to help expand the dictionary or improve the translator?
+          - Check out [CONTRIBUTING.md](CONTRIBUTING.md)
+          - Browse [good first issues](https://github.com/vaporjawn/klingon-translator/labels/good%20first%20issue)
+          - Join discussions about Klingon language accuracy
+
+          ## 🖖 Community
+
+          - **GitHub Discussions**: Share ideas and ask questions
+          - **Issues**: Report bugs or request features
+          - **Star Trek Authenticity**: Help maintain canon accuracy
+
+          ## 📚 Resources
+
+          - **The Klingon Dictionary (TKD)** - Marc Okrand
+          - **Klingon Language Institute** - Community resources
+          - **Memory Alpha** - Star Trek canon reference
+
+          ---
+
+          **DIch!** (Certainly!) This release brings us closer to a truly authentic Klingon language experience.
+
+          **Live long and prosper.** 🖖
+          EOF
+
+          echo "Generated release notes for version ${VERSION}"
+
+      - name: 🚀 Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: 🖖 Klingon Universal Translator ${{ steps.get_version.outputs.version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+
+  # Build and attach assets
+  build-assets:
+    name: 🏗️ Build Release Assets
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    permissions:
+      contents: write
+
+    strategy:
+      matrix:
+        format: [zip, tar.gz]
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🏗️ Build for Production
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: 📋 Generate Build Info
+        run: |
+          cat > dist/BUILD_INFO.txt << EOF
+          Klingon Universal Translator ${{ needs.create-release.outputs.version }}
+          Built: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          Commit: ${{ github.sha }}
+          Node.js: ${{ env.NODE_VERSION }}
+
+          Installation:
+          1. Extract files to web server directory
+          2. Serve index.html via HTTP/HTTPS
+          3. Enjoy translating! 🖖
+
+          For development setup:
+          https://github.com/vaporjawn/klingon-translator#development
+          EOF
+
+      - name: 📦 Create ZIP Archive
+        if: matrix.format == 'zip'
+        run: |
+          cd dist
+          zip -r ../klingon-translator-${{ needs.create-release.outputs.version }}.zip .
+          cd ..
+
+      - name: 📦 Create TAR.GZ Archive
+        if: matrix.format == 'tar.gz'
+        run: |
+          cd dist
+          tar -czf ../klingon-translator-${{ needs.create-release.outputs.version }}.tar.gz .
+          cd ..
+
+      - name: 📤 Upload ZIP Asset
+        if: matrix.format == 'zip'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./klingon-translator-${{ needs.create-release.outputs.version }}.zip
+          asset_name: klingon-translator-${{ needs.create-release.outputs.version }}.zip
+          asset_content_type: application/zip
+
+      - name: 📤 Upload TAR.GZ Asset
+        if: matrix.format == 'tar.gz'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./klingon-translator-${{ needs.create-release.outputs.version }}.tar.gz
+          asset_name: klingon-translator-${{ needs.create-release.outputs.version }}.tar.gz
+          asset_content_type: application/gzip
+
+  # Update package registries
+  publish-npm:
+    name: 📦 Publish to NPM (if configured)
+    runs-on: ubuntu-latest
+    needs: [create-release, build-assets]
+    if: contains(github.event.head_commit.message, '[publish npm]')
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Package
+        run: npm run build
+
+      - name: 📦 Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # Notify community
+  notify-release:
+    name: 📢 Notify Community
+    runs-on: ubuntu-latest
+    needs: [create-release, build-assets]
+
+    steps:
+      - name: 📢 Release Announcement
+        run: |
+          echo "🖖 Qapla'! New Klingon Universal Translator release!"
+          echo "Version: ${{ needs.create-release.outputs.version }}"
+          echo "Release URL: https://github.com/vaporjawn/klingon-translator/releases/latest"
+          echo "Live Demo: https://vaporjawn.github.io/klingon-translator"
+          echo ""
+          echo "🌟 Thank you to all contributors who made this release possible!"
+          echo "The Star Trek community appreciates your dedication to preserving Klingon language!"
+
+    # Add more notification steps here if needed:
+    # - Discord webhook
+    # - Twitter announcement
+    # - Email notification
+    # - Slack notification

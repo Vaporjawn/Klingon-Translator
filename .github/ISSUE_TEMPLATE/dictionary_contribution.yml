@@ -1,0 +1,225 @@
+﻿name: 📚 Dictionary Contribution
+description: Add new Klingon words, phrases, or improve existing translations
+title: "[DICTIONARY] "
+labels: ["dictionary", "enhancement", "good first issue"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **nugh naDev!** (Expand the dictionary!)
+
+        Thanks for contributing to our Klingon dictionary! Every word makes our translator more accurate and useful for the Star Trek community.
+
+  - type: dropdown
+    id: contribution-type
+    attributes:
+      label: 📖 Type of Dictionary Contribution
+      description: What kind of dictionary work are you contributing?
+      options:
+        - New Klingon words/phrases
+        - Corrections to existing entries
+        - Missing translations
+        - Pronunciation improvements
+        - Usage examples
+        - Cultural context additions
+        - Grammar/syntax clarifications
+    validations:
+      required: true
+
+  - type: textarea
+    id: new-entries
+    attributes:
+      label: 🆕 New Dictionary Entries
+      description: |
+        Add new Klingon words/phrases using this format:
+      placeholder: |
+        **Klingon**: nuqneH
+        **English**: hello, what do you want?
+        **Part of Speech**: exclamation
+        **Pronunciation**: nook-NEKH
+        **Usage**: casual greeting, can be slightly rude
+        **Examples**:
+        - nuqneH teywI' = Hello visitor
+        - nuqneH, jup = Hello, friend
+        **Source**: TKD (The Klingon Dictionary)
+        **Notes**: More direct than Earth greetings
+
+        ---
+
+        **Klingon**: [next word]
+        **English**: [translation]
+        [etc...]
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: corrections
+    attributes:
+      label: ✏️ Corrections to Existing Entries
+      description: What needs to be corrected in the current dictionary?
+      placeholder: |
+        **Current Entry**: [copy the current incorrect entry]
+        **Correction Needed**: [explain what's wrong]
+        **Corrected Entry**: [provide the corrected version]
+        **Source**: [reference for the correction]
+      render: markdown
+    validations:
+      required: false
+
+  - type: dropdown
+    id: word-category
+    attributes:
+      label: 📂 Word Category
+      description: What category do these words fall into?
+      options:
+        - Basic vocabulary (colors, numbers, common objects)
+        - Greetings and social interactions
+        - Family and relationships
+        - Food and drink
+        - Body parts and health
+        - Military and weapons
+        - Honor and dishonor concepts
+        - Emotions and feelings
+        - Time and space
+        - Technology and science
+        - Curse words and exclamations
+        - Religious/spiritual terms
+        - Cultural ceremonies
+        - Grammar particles
+        - Verbs (action words)
+        - Adjectives (descriptive words)
+        - Nouns (things, concepts)
+        - Other (specify in notes)
+
+  - type: checkboxes
+    id: parts-of-speech
+    attributes:
+      label: 🔤 Parts of Speech Included
+      description: What types of words are you adding? (check all that apply)
+      options:
+        - label: Nouns (things, people, concepts)
+        - label: Verbs (actions, states of being)
+        - label: Adjectives (descriptive words)
+        - label: Adverbs (modify verbs/adjectives)
+        - label: Pronouns (I, you, he, she, it, etc.)
+        - label: Conjunctions (and, or, but, etc.)
+        - label: Exclamations (nuqneH, Qapla', etc.)
+        - label: Numbers
+        - label: Question words
+        - label: Grammar suffixes/particles
+
+  - type: checkboxes
+    id: sources
+    attributes:
+      label: 📚 Sources Used
+      description: What sources did you use for these entries? (check all that apply)
+      options:
+        - label: TKD - The Klingon Dictionary (Marc Okrand)
+        - label: KGT - Klingon for the Galactic Traveler
+        - label: TOS - The Original Series episodes
+        - label: TNG - The Next Generation episodes
+        - label: DS9 - Deep Space Nine episodes
+        - label: VOY - Voyager episodes
+        - label: ENT - Enterprise episodes
+        - label: DIS - Discovery episodes
+        - label: Klingon Language Institute (KLI)
+        - label: Memory Alpha (Star Trek wiki)
+        - label: Other canonical sources
+        - label: Community/fan sources (please specify)
+
+  - type: input
+    id: source-details
+    attributes:
+      label: 📖 Source Details
+      description: Provide specific citations if available
+      placeholder: "e.g., TKD page 42, TNG S3E15 'Yesterday's Enterprise', KLI vocabulary list 2023"
+
+  - type: textarea
+    id: pronunciation-guide
+    attributes:
+      label: 🗣️ Pronunciation Guide
+      description: |
+        How should these words be pronounced? Use English phonetics.
+      placeholder: |
+        **Klingon Word**: nuqneH
+        **Pronunciation**: nook-NEKH (stress on second syllable)
+        **Notes**: The 'q' is a back-of-throat sound, 'H' is breathy
+
+        Use this format:
+        - CAPS for stressed syllables
+        - Hyphens to separate syllables
+        - Notes for special Klingon sounds (q, Q, H, gh, ng, tlh, etc.)
+
+  - type: textarea
+    id: cultural-context
+    attributes:
+      label: 🖖 Cultural Context
+      description: Any important cultural or usage information about these words?
+      placeholder: |
+        - When is this word typically used?
+        - Is it formal or informal?
+        - Are there cultural taboos or special meanings?
+        - Does it relate to Klingon honor code?
+        - Regional or house variations?
+
+  - type: textarea
+    id: example-sentences
+    attributes:
+      label: 💬 Example Sentences
+      description: Provide example sentences showing these words in context
+      placeholder: |
+        **Klingon**: nuqneH, yaS
+        **English**: Hello, officer
+        **Context**: Formal greeting to a military officer
+
+        **Klingon**: bIlugh nuqneH
+        **English**: You're right, what do you want?
+        **Context**: Acknowledging correctness before asking purpose
+
+  - type: dropdown
+    id: difficulty-level
+    attributes:
+      label: 📈 Difficulty Level
+      description: How advanced are these words for Klingon learners?
+      options:
+        - Beginner (essential basic words)
+        - Intermediate (common conversational words)
+        - Advanced (specialized or complex terms)
+        - Expert (rare, technical, or archaic terms)
+
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: ✅ Verification Checklist
+      description: Please confirm you've checked these items
+      options:
+        - label: I've verified these entries against canonical sources
+        - label: I've checked for duplicate entries in the current dictionary
+        - label: I've included pronunciation guides where helpful
+        - label: I've provided English phonetic spellings for Klingon sounds
+        - label: I've included usage context where relevant
+        - label: I've followed the format specified above
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: 📝 Additional Notes
+      description: Any other information about these dictionary entries?
+      placeholder: |
+        - Variations or alternative spellings
+        - Related words or word families
+        - Etymology or word origins
+        - Cross-references to other entries
+        - Implementation suggestions
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        **DIch!** (Certainly!) Your dictionary contributions help preserve and share Klingon language with fellow Star Trek fans!
+
+        The maintainers will review your submission for accuracy and canonical authenticity before merging.

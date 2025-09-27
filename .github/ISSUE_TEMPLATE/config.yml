@@ -1,0 +1,14 @@
+﻿blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions - Questions & Ideas
+    url: https://github.com/vaporjawn/klingon-translator/discussions
+    about: Ask questions, share ideas, or discuss the Klingon Universal Translator with the community
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/vaporjawn/klingon-translator/security/advisories/new
+    about: Report a security vulnerability privately (DO NOT use public issues for security)
+  - name: 📖 Documentation & Help
+    url: https://github.com/vaporjawn/klingon-translator#readme
+    about: Check the README for setup instructions, usage guides, and project information
+  - name: 🖖 Star Trek Authenticity Questions
+    url: https://github.com/vaporjawn/klingon-translator/discussions/categories/klingon-language
+    about: Discuss Klingon language authenticity, canon sources, and Star Trek cultural accuracy

@@ -1,0 +1,215 @@
+﻿name: 🚀 Feature Request
+description: Suggest an idea for the Klingon Universal Translator
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please fill out this form to help us understand your idea.
+
+        🖖 **jup!** (Yes!) We love hearing new ideas from the Star Trek community!
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 🚀 Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: Describe the feature you want...
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 💡 Motivation and Use Case
+      description: Why would this feature be useful? What problem does it solve?
+      placeholder: |
+        - As a [type of user], I want [goal] so that [benefit]
+        - This would help with...
+        - The current limitation is...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: 📂 Feature Category
+      description: What type of feature is this?
+      options:
+        - Dictionary/Translation Enhancement
+        - User Interface Improvement
+        - Audio/Speech Feature
+        - Theme/Visual Enhancement
+        - Performance Optimization
+        - Accessibility Feature
+        - Mobile Enhancement
+        - New Star Trek Theme
+        - Developer/Technical Feature
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: star-trek-series
+    attributes:
+      label: 🖖 Star Trek Series (if applicable)
+      description: If this relates to a specific Star Trek series, which one?
+      options:
+        - Not applicable
+        - The Original Series (TOS)
+        - The Next Generation (TNG)
+        - Deep Space Nine (DS9)
+        - Voyager (VOY)
+        - Enterprise (ENT)
+        - Discovery (DIS)
+        - Lower Decks (LD)
+        - Prodigy (PRO)
+        - Strange New Worlds (SNW)
+        - Picard (PIC)
+        - Multiple Series
+        - General Star Trek
+
+  - type: textarea
+    id: detailed-design
+    attributes:
+      label: 📋 Detailed Design
+      description: How should this feature work? Include mockups or wireframes if helpful.
+      placeholder: |
+        Describe in detail:
+        - How users would interact with this feature
+        - What the interface would look like
+        - How it would integrate with existing features
+        - Any technical considerations
+
+  - type: checkboxes
+    id: acceptance-criteria
+    attributes:
+      label: ✅ Acceptance Criteria
+      description: What needs to be true for this feature to be considered complete?
+      options:
+        - label: Feature works on desktop browsers
+        - label: Feature works on mobile devices
+        - label: Feature is accessible (WCAG compliant)
+        - label: Feature integrates with existing themes
+        - label: Feature has appropriate error handling
+        - label: Feature includes documentation/help text
+        - label: Feature is tested (unit/integration tests)
+        - label: Feature follows Star Trek authenticity guidelines
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: 📖 Examples and References
+      description: Provide examples, references, or inspiration for this feature
+      placeholder: |
+        - Similar features in other apps
+        - Star Trek canon references
+        - Screenshots or links to inspiration
+        - Specific Klingon language examples
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: 🔧 Implementation Complexity (your estimate)
+      description: How complex do you think this feature would be to implement?
+      options:
+        - Simple (small UI change, data addition)
+        - Medium (new component, moderate logic)
+        - Complex (major feature, significant changes)
+        - Very Complex (architectural changes, new systems)
+        - Not sure
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 🎯 Priority Level
+      description: How important is this feature to you and other users?
+      options:
+        - Nice to have (would be cool but not essential)
+        - Moderate (would improve the experience)
+        - High (would solve a real problem)
+        - Critical (essential for usability)
+
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: 🤔 Alternatives Considered
+      description: What alternatives have you considered? Why is this approach preferred?
+      placeholder: |
+        - Alternative approach 1: ...
+        - Alternative approach 2: ...
+        - Why this solution is better: ...
+
+  - type: checkboxes
+    id: user-types
+    attributes:
+      label: 👥 Target Users
+      description: Who would benefit from this feature?
+      options:
+        - label: Klingon language learners
+        - label: Star Trek fans (casual)
+        - label: Star Trek fans (hardcore/canon experts)
+        - label: Mobile users
+        - label: Desktop users
+        - label: Accessibility users (screen readers, etc.)
+        - label: Developers/Contributors
+        - label: All users
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: ⚠️ Breaking Changes
+      description: Would this feature require breaking changes to existing functionality?
+      options:
+        - No, this is purely additive
+        - Minor changes to existing features
+        - Major changes required
+        - Complete redesign needed
+        - Not sure
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: 🔬 Technical Considerations
+      description: Any technical aspects to consider?
+      placeholder: |
+        - Performance implications
+        - Browser compatibility requirements
+        - External dependencies needed
+        - Data storage requirements
+        - API integrations
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 🔗 Additional Context
+      description: Any other context, screenshots, mockups, or examples
+      placeholder: |
+        - Links to similar implementations
+        - Mockup images or wireframes
+        - Star Trek references or canon considerations
+        - Community discussions about this idea
+
+  - type: checkboxes
+    id: contribution-willingness
+    attributes:
+      label: 🤝 Contribution
+      description: Would you be willing to help implement this feature?
+      options:
+        - label: I'd like to help implement this
+        - label: I can help with testing
+        - label: I can help with documentation
+        - label: I can help with design/mockups
+        - label: I prefer to just suggest the idea
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        **jagh DIch!** (Kill the enemy first!) - Thanks for helping us improve the translator!
+
+        Your feature request will be reviewed by the maintainers and community. We'll add appropriate labels and discuss implementation details.

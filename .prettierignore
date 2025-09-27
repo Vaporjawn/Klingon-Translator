@@ -1,0 +1,54 @@
+# Generated files and directories
+coverage/
+dist/
+node_modules/
+.vite/
+
+# Test results
+test-results/
+playwright-report/
+
+# Build outputs
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# Dependency directories
+node_modules/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Cache directories
+.npm
+.cache/
+
+# Generated documentation
+docs/generated/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

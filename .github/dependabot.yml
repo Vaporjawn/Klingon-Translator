@@ -1,0 +1,104 @@
+﻿# Dependabot configuration for automated dependency updates
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Enable version updates for npm (JavaScript/TypeScript dependencies)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    assignees:
+      - "vaporjawn"
+    commit-message:
+      prefix: "⬆️ deps"
+      prefix-development: "⬆️ dev-deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    # Group related updates together to reduce PR noise
+    groups:
+      # Group all React-related packages
+      react-ecosystem:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      # Group Material-UI packages
+      mui-ecosystem:
+        patterns:
+          - "@mui/*"
+          - "@emotion/*"
+      # Group TypeScript and ESLint packages
+      tooling-ecosystem:
+        patterns:
+          - "typescript*"
+          - "@typescript-eslint/*"
+          - "eslint*"
+          - "prettier"
+          - "@types/*"
+      # Group testing packages
+      testing-ecosystem:
+        patterns:
+          - "vitest*"
+          - "@vitest/*"
+          - "playwright*"
+          - "@playwright/*"
+      # Group Vite and build tools
+      build-ecosystem:
+        patterns:
+          - "vite*"
+          - "@vitejs/*"
+          - "rolldown*"
+    # Allow all direct dependencies for patch/minor updates
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+        # Only security updates for indirect dependencies
+    # Ignore certain packages that require manual updates
+    ignore:
+      # Ignore major React updates as they require manual testing
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      # Ignore major TypeScript updates
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # Ignore major MUI updates
+      - dependency-name: "@mui/*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    assignees:
+      - "vaporjawn"
+    commit-message:
+      prefix: "⬆️ action"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "automated"
+    # Group GitHub Actions updates
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Enable security updates for Docker (if we add Docker support later)
+  # - package-ecosystem: "docker"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #   open-pull-requests-limit: 5

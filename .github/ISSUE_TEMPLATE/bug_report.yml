@@ -1,0 +1,211 @@
+﻿name: 🐛 Bug Report
+description: Create a report to help us improve the Klingon Universal Translator
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out this form as completely as possible.
+
+        🖖 **Qapla'!** Your contribution helps make the translator better for all Star Trek fans.
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: 🐛 Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug you encountered...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: 🔄 Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Enter text '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: ✅ Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: ❌ Actual Behavior
+      description: A clear and concise description of what actually happened.
+      placeholder: What actually happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: 🌐 Browser
+      description: Which browser are you using?
+      options:
+        - Chrome
+        - Safari
+        - Firefox
+        - Edge
+        - Other (please specify in additional context)
+    validations:
+      required: true
+
+  - type: input
+    id: browser-version
+    attributes:
+      label: Browser Version
+      description: What version of the browser?
+      placeholder: e.g. Chrome 91.0.4472.124
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: 🖥️ Operating System
+      description: Which operating system are you using?
+      options:
+        - macOS
+        - Windows
+        - iOS
+        - Android
+        - Linux
+        - Other (please specify in additional context)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device-type
+    attributes:
+      label: 📱 Device Type
+      description: What type of device are you using?
+      options:
+        - Desktop/Laptop
+        - Mobile Phone
+        - Tablet
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source-language
+    attributes:
+      label: 📖 Source Language
+      description: What language were you translating FROM?
+      options:
+        - English
+        - Klingon
+    validations:
+      required: false
+
+  - type: dropdown
+    id: target-language
+    attributes:
+      label: 🎯 Target Language
+      description: What language were you translating TO?
+      options:
+        - English
+        - Klingon
+    validations:
+      required: false
+
+  - type: input
+    id: translation-text
+    attributes:
+      label: Translation Text
+      description: What text were you trying to translate? (if applicable)
+      placeholder: e.g. "nuqneH" or "Hello, how are you?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: console-errors
+    attributes:
+      label: 🔍 Console Errors
+      description: Please check the browser console (F12) for any error messages
+      placeholder: Paste any console errors here...
+      render: shell
+
+  - type: dropdown
+    id: theme
+    attributes:
+      label: 🎨 Current Theme
+      description: Which Star Trek theme were you using?
+      options:
+        - TOS (The Original Series)
+        - TNG (The Next Generation)
+        - DS9 (Deep Space Nine)
+        - VOY (Voyager)
+        - ENT (Enterprise)
+        - Other/Custom
+
+  - type: checkboxes
+    id: audio-context
+    attributes:
+      label: 🔊 Audio Issues (if applicable)
+      description: Check any audio-related issues you experienced
+      options:
+        - label: Speech synthesis not working
+        - label: Audio playback not working
+        - label: Error during speech generation
+        - label: Audio quality issues
+
+  - type: checkboxes
+    id: reproducibility
+    attributes:
+      label: � Reproducibility
+      description: Help us understand how consistent this issue is
+      options:
+        - label: This happens every time I try
+        - label: This happens with specific words/phrases only
+        - label: I tried refreshing the page
+        - label: I tried a different browser
+        - label: I cleared my browser cache
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 Screenshots
+      description: If applicable, add screenshots to help explain your problem
+      placeholder: Drag and drop screenshots here, or paste image URLs
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 🔗 Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any other details that might help us understand the issue...
+
+  - type: textarea
+    id: possible-solution
+    attributes:
+      label: 🚀 Possible Solution
+      description: If you have ideas on how to fix this, please share them here
+      placeholder: Any suggestions for how this could be fixed...
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 🚨 Priority Assessment
+      description: How would you rate the severity of this issue?
+      options:
+        - Low (cosmetic or edge case)
+        - Medium (minor feature issue)
+        - High (major feature broken)
+        - Critical (app is unusable)
