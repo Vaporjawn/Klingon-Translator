@@ -1,0 +1,42 @@
+{
+  "app_title": "tlhIngan Hol mugh",
+  "subtitle": "Hoch Hol chenmoH mugh",
+  "input_placeholder": "mugh neH mu'tlhegh naDev...",
+  "output_placeholder": "naDev mugh...",
+  "translate_button": "mugh",
+  "listen_button": "'e' Sov",
+  "clear_button": "chup",
+  "copy_button": "nugh",
+  "language_selector": {
+    "from": "vo'",
+    "to": "DIch",
+    "english": "DIch Hol",
+    "klingon": "tlhIngan Hol"
+  },
+  "translation_result": "mugh maH",
+  "footer": {
+    "made_by": "chenmoH",
+    "open_source": "nugh nugh",
+    "powered_by": "nugh DIch mugh lo'wI'",
+    "inspired": "naDev",
+    "technologies": "lo'meH mI':",
+    "star_trek": "Hovtay'",
+    "react": "React",
+    "typescript": "TypeScript",
+    "material_ui": "Material-UI"
+  },
+  "language_switch": "DIch Hol lo'",
+  "language_switch_english": "DIch Hol SeHwI' choq",
+  "language_switch_aria": "Hol choq",
+  "audio": {
+    "speaking": "jatlh...",
+    "error": "ghu jatlhqa'ghach DIch DIlo'be'",
+    "copied": "naDev!"
+  },
+  "translation": {
+    "no_translation": "mugh tu'lu'be'",
+    "enter_text": "mugh neH mu'tlhegh naDev",
+    "translation_complete": "mugh DIch",
+    "translating": "mugh..."
+  }
+}

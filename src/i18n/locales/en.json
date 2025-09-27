@@ -1,0 +1,42 @@
+{
+  "app_title": "Universal Language Translator",
+  "subtitle": "Klingon Translator",
+  "input_placeholder": "Enter text to translate...",
+  "output_placeholder": "Translation will appear here...",
+  "translate_button": "Translate",
+  "listen_button": "Listen",
+  "clear_button": "Clear",
+  "copy_button": "Copy",
+  "language_selector": {
+    "from": "From",
+    "to": "To",
+    "english": "English",
+    "klingon": "Klingon"
+  },
+  "translation_result": "Translation Result",
+  "footer": {
+    "made_by": "Made by",
+    "open_source": "Open Source",
+    "powered_by": "Enterprise-grade translator powered by",
+    "inspired": "Inspired",
+    "technologies": "Technologies Used:",
+    "star_trek": "Star Trek",
+    "react": "React",
+    "typescript": "TypeScript",
+    "material_ui": "Material-UI"
+  },
+  "language_switch": "Switch to Klingon Interface",
+  "language_switch_english": "Switch to English Interface",
+  "language_switch_aria": "switch language",
+  "audio": {
+    "speaking": "Speaking...",
+    "error": "Speech synthesis not supported",
+    "copied": "Copied to clipboard!"
+  },
+  "translation": {
+    "no_translation": "No translation found",
+    "enter_text": "Enter text to translate",
+    "translation_complete": "Translation complete",
+    "translating": "Translating..."
+  }
+}
