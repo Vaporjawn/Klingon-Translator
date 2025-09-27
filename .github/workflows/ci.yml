@@ -247,7 +247,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         with:
           urls: |
-            https://vaporjawn.github.io/klingon-translator
+            https://vaporjawn.dev/klingon-translator/
           configPath: ".lighthouserc.json"
           uploadArtifacts: true
           temporaryPublicStorage: true
@@ -263,4 +263,4 @@ jobs:
       - name: 🎉 Success Notification
         run: |
           echo "🖖 Qapla'! Deployment successful!"
-          echo "🌟 Klingon Universal Translator is live at: https://vaporjawn.github.io/klingon-translator"
+          echo "🌟 Klingon Universal Translator is live at: https://vaporjawn.dev/klingon-translator/"
