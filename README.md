@@ -2,7 +2,6 @@
 
 <img width="1473" height="970" alt="Screenshot 2025-09-27 at 11 43 01" src="https://github.com/user-attachments/assets/6e5b03d7-2662-4865-bde8-af1d563f2fce" />
 
-
 A fully functional **Star Trek-themed Klingon ⇄ English translator** built with modern web technologies. This application provides a Google Translate-inspired interface with authentic Star Trek visual design and comprehensive translation capabilities.
 
 [![CI/CD Pipeline](https://github.com/vaporjawn/klingon-translator/actions/workflows/ci.yml/badge.svg)](https://github.com/vaporjawn/klingon-translator/actions/workflows/ci.yml)

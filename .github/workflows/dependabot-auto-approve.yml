@@ -1,0 +1,105 @@
+﻿# Auto-approve Dependabot PRs for patch and minor updates
+# This workflow automatically approves Dependabot pull requests for:
+# - Patch updates (x.y.Z)
+# - Minor updates (x.Y.z)
+# - Security updates
+# Major updates (X.y.z) are left for manual review
+
+name: Dependabot Auto-Approve
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    # Only run this job if the PR is from Dependabot
+    if: github.actor == 'dependabot[bot]'
+    outputs:
+      update-type: ${{ steps.dependabot-metadata.outputs.update-type }}
+
+    steps:
+      - name: Fetch Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.PERSONAL_GITHUB_TOKEN }}"
+
+      - name: Auto-approve patch and minor updates
+        # Auto-approve if it's a patch or minor update, or a security update
+        if: |
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor' ||
+          contains(steps.dependabot-metadata.outputs.dependency-names, 'security')
+        run: |
+          echo "Auto-approving ${{ steps.dependabot-metadata.outputs.update-type }} update"
+          echo "Dependencies: ${{ steps.dependabot-metadata.outputs.dependency-names }}"
+          gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - name: Comment on major updates
+        # Add a comment for major updates explaining why they weren't auto-approved
+        if: steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
+        run: |
+          gh pr comment "$PR_URL" --body "🔍 **Major update detected** - This PR contains major version updates that require manual review and testing before approval.
+
+          **Dependencies being updated:**
+          ${{ steps.dependabot-metadata.outputs.dependency-names }}
+
+          Please review the changelog and test thoroughly before merging."
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - name: Add labels for auto-approved PRs
+        if: |
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'
+        run: |
+          gh pr edit "$PR_URL" --add-label "auto-approved"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+  # Optional: Auto-merge patch updates after CI passes
+  auto-merge:
+    runs-on: ubuntu-latest
+    needs: auto-approve
+    if: |
+      github.actor == 'dependabot[bot]' &&
+      needs.auto-approve.outputs.update-type == 'version-update:semver-patch'
+
+    steps:
+      - name: Fetch Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.PERSONAL_GITHUB_TOKEN }}"
+
+      - name: Wait for CI to complete
+        # Wait for the CI workflow to complete before auto-merging
+        run: |
+          echo "Waiting for CI checks to complete..."
+          sleep 60  # Give CI time to start
+
+          # Check if all required checks have passed
+          gh pr checks "$PR_URL" --watch --interval 30
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - name: Auto-merge patch updates
+        if: steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          echo "Auto-merging patch update after CI completion"
+          gh pr merge "$PR_URL" --squash --auto
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}

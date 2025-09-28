@@ -1,0 +1,78 @@
+﻿name: Deploy to Surge
+
+on:
+  push:
+    branches: [main, master]
+  pull_request_target:
+    branches: [main, master]
+    types: [closed]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    # Only run on push to main/master OR when PR is merged
+    if: github.event_name == 'push' || (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true) || github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # For pull_request_target, we want to checkout the merged commit
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.merge_commit_sha || github.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build
+
+      - name: Install Surge CLI
+        run: npm install -g surge
+
+      - name: Deploy to Surge
+        run: |
+          # Deploy the built dist folder to your custom domain
+          surge ./dist vaporjawn.dev --token ${{ secrets.SURGE_TOKEN }}
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PERSONAL_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 Successfully deployed to Surge! Your changes are now live at https://vaporjawn.dev/klingon-translator/'
+            });
+
+      - name: Create deployment status
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PERSONAL_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: context.payload.deployment?.id || 1,
+              state: 'success',
+              environment_url: 'https://vaporjawn.dev/klingon-translator/',
+              description: 'Deployment completed successfully'
+            });

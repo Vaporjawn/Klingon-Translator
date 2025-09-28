@@ -1,0 +1,74 @@
+﻿# Simple Dependabot Auto-Approve (Approval Only, No Auto-Merge)
+# This workflow automatically approves Dependabot pull requests for:
+# - Patch updates (x.y.Z)
+# - Minor updates (x.Y.z)
+# - Security updates
+# Major updates (X.y.z) are left for manual review
+# All PRs still require manual merging after approval
+
+name: Dependabot Auto-Approve (Simple)
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Fetch Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.PERSONAL_GITHUB_TOKEN }}"
+
+      - name: Auto-approve safe updates
+        if: |
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'
+        run: |
+          echo "✅ Auto-approving ${{ steps.dependabot-metadata.outputs.update-type }} update"
+          echo "📦 Dependencies: ${{ steps.dependabot-metadata.outputs.dependency-names }}"
+          gh pr review --approve "$PR_URL" --body "✅ **Auto-approved** ${{ steps.dependabot-metadata.outputs.update-type }} dependency update.
+
+          This update has been automatically approved as it only contains patch or minor version changes, which are generally safe to merge.
+
+          **Updated dependencies:**
+          ${{ steps.dependabot-metadata.outputs.dependency-names }}
+
+          ℹ️ Please verify CI checks pass before merging."
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - name: Comment on major updates
+        if: steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
+        run: |
+          gh pr comment "$PR_URL" --body "🔍 **Major update detected** - This PR requires manual review.
+
+          **Dependencies being updated:**
+          ${{ steps.dependabot-metadata.outputs.dependency-names }}
+
+          Major version updates may contain breaking changes. Please:
+          1. Review the changelog for breaking changes
+          2. Test thoroughly before approving
+          3. Consider updating code if necessary"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - name: Add auto-approval label
+        if: |
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'
+        run: |
+          gh pr edit "$PR_URL" --add-label "auto-approved"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
