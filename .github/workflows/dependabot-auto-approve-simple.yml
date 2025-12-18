@@ -62,13 +62,3 @@ jobs:
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-
-      - name: Add auto-approval label
-        if: |
-          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' ||
-          steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'
-        run: |
-          gh pr edit "$PR_URL" --add-label "auto-approved"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}

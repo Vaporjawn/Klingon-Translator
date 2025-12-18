@@ -13,14 +13,11 @@ updates:
       timezone: "America/New_York"
     open-pull-requests-limit: 10
     assignees:
-      - "vaporjawn"
+      - "Vaporjawn"
     commit-message:
       prefix: "⬆️ deps"
       prefix-development: "⬆️ dev-deps"
       include: "scope"
-    labels:
-      - "dependencies"
-      - "automated"
     # Group related updates together to reduce PR noise
     groups:
       # Group all React-related packages
@@ -83,13 +80,10 @@ updates:
       timezone: "America/New_York"
     open-pull-requests-limit: 5
     assignees:
-      - "vaporjawn"
+      - "Vaporjawn"
     commit-message:
       prefix: "⬆️ action"
       include: "scope"
-    labels:
-      - "github-actions"
-      - "automated"
     # Group GitHub Actions updates
     groups:
       github-actions:
