@@ -81,7 +81,7 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "jsdom": "^27.0.0",
-    "lint-staged": "^16.2.3",
+    "lint-staged": "^16.2.7",
     "playwright": "^1.55.1",
     "prettier": "^3.7.4",
     "typescript": "~5.9.3",
